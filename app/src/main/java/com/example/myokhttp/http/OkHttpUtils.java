@@ -60,7 +60,7 @@ public class OkHttpUtils {
             @Override
             public void onFailure(Call call, IOException e) {
                 String err = "请求失败";
-                sendFailResult(err);
+                sendFailResult(myCallBack, err);
             }
 
             @Override
@@ -80,7 +80,7 @@ public class OkHttpUtils {
             @Override
             public void onFailure(Call call, IOException e) {
                 String err = "请求失败";
-                sendFailResult(err);
+                sendFailResult(myDownloadCallBack, err);
             }
 
             @Override
@@ -88,6 +88,11 @@ public class OkHttpUtils {
                 Headers responseHeaders = response.headers();
                 for (int i = 0; i < responseHeaders.size(); i++) {
                     Log.e("TAG", "=========" + responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                }
+                //判断文件夹是否存在，如果不存在就创建文件夹
+                File dirFolder = new File(destFileDir);
+                if (!dirFolder.exists()) { //如果该文件夹不存在，则进行创建
+                    dirFolder.mkdirs();//创建文件夹
                 }
                 InputStream is = null;
                 byte[] buf = new byte[2048];
@@ -103,10 +108,10 @@ public class OkHttpUtils {
                     fos.write(buf, 0, len);
 
                     sum += len;
-                     final int progress = (int) (sum * 1.0f / total * 100);
+                    final int progress = (int) (sum * 1.0f / total * 100);
                     // 下载中
 //                            myDownloadCallBack.onDownloading(progress);
-                    sendDownloadProgress(myDownloadCallBack,progress);
+                    sendDownloadProgress(myDownloadCallBack, progress);
                 }
                 fos.flush();
                 //如果下载文件成功，第一个参数为文件的绝对路径
@@ -126,29 +131,15 @@ public class OkHttpUtils {
         });
     }
 
+    /**
+     * 根据请求地址判断下载文件的名称
+     *
+     * @param path
+     * @return
+     */
     private String getFileName(String path) {
         int separatorIndex = path.lastIndexOf("/");
         return (separatorIndex < 0) ? path : path.substring(separatorIndex + 1, path.length());
-    }
-
-    //异步post请求
-    public void post(String url, final MyCallBack myCallBack) {
-        //创建请求
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        httpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                String err = "请求失败";
-                sendFailResult(err);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                sendSuccessResult(myCallBack, response.body().string());
-            }
-        });
     }
 
     /**
@@ -179,8 +170,15 @@ public class OkHttpUtils {
     /**
      * 在主线程返回失败结果
      */
-    private void sendFailResult(String err) {
-    }
+    private void sendFailResult(final MyCallBack myCallBack, final String err) {
 
+        mDelivery.post(new Runnable() {
+            @Override
+            public void run() {
+
+                myCallBack.onFail(err);
+            }
+        });
+    }
 
 }

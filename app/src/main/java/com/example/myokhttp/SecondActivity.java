@@ -48,7 +48,7 @@ public class SecondActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_postNet)
     public void onViewClicked() {
-        String path = Environment.getExternalStorageDirectory().getPath()+"/111";
+        String path = Environment.getExternalStorageDirectory().getPath()+"/222";
         OkHttpUtils.getInstance().download(url, path, new MyCallBack<String>() {
             @Override
             public void onSuccess(String s) {
