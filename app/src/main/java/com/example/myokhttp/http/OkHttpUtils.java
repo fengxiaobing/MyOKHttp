@@ -54,7 +54,6 @@ public class OkHttpUtils {
     public void get(String url, final MyCallBack myCallBack) {
         //创建请求
         Request request = new Request.Builder()
-                .get()
                 .url(url)
                 .build();
         httpClient.newCall(request).enqueue(new Callback() {

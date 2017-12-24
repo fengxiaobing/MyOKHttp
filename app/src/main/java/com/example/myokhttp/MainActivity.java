@@ -13,7 +13,6 @@ import com.example.myokhttp.http.OkHttpUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tv_result;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,18 +26,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_getNet:
-
-
                 //获取响应值
                 OkHttpUtils.getInstance().<Person>get("http://tj.nineton.cn/Heart/index/all", new MyCallBack<WeatherEntity>() {
-
-
                     @Override
                     public void onSuccess(WeatherEntity weatherEntity) {
                         WeatherEntity mWeatherEntity = weatherEntity;
                         tv_result.setText(mWeatherEntity.getStatus());
                     }
-
                     @Override
                     public void onFail(String err) {
 
