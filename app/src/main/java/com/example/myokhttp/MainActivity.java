@@ -30,24 +30,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 //获取响应值
-//                OkHttpUtils.getInstance().<Person>get("http://tj.nineton.cn/Heart/index/all", new MyCallBack<WeatherEntity>() {
-//
-//
-//                    @Override
-//                    public void onSuccess(WeatherEntity weatherEntity) {
-//                        WeatherEntity mWeatherEntity = weatherEntity;
-//                    }
-//
-//                    @Override
-//                    public void onFail(String err) {
-//
-//                    }
-//                });
-                OkHttpUtils.getInstance().<Person>get("http://tj.nineton.cn/Heart/index/all", new MyCallBack<String>() {
+                OkHttpUtils.getInstance().<Person>get("http://tj.nineton.cn/Heart/index/all", new MyCallBack<WeatherEntity>() {
+
+
                     @Override
-                    public void onSuccess(String weatherEntity) {
-                        String mWeatherEntity = weatherEntity;
-                        tv_result.setText(mWeatherEntity);
+                    public void onSuccess(WeatherEntity weatherEntity) {
+                        WeatherEntity mWeatherEntity = weatherEntity;
+                        tv_result.setText(mWeatherEntity.getStatus());
                     }
 
                     @Override
@@ -55,6 +44,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+//                OkHttpUtils.getInstance().get("http://tj.nineton.cn/Heart/index/all", new MyCallBack<String>() {
+//                    @Override
+//                    public void onSuccess(String weatherEntity) {
+//                        String mWeatherEntity = weatherEntity;
+//                        tv_result.setText(mWeatherEntity);
+//                    }
+//
+//                    @Override
+//                    public void onFail(String err) {
+//
+//                    }
+//                });
 
                 break;
         }
